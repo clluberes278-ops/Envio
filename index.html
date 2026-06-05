@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Mi Envío Cargo Express | Tu Courier de Confianza</title>
+
+  <!-- Íconos -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+  <!-- AOS — Animate On Scroll -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"/>
+  <!-- 
+    MEJORA: añadido &display=swap para evitar FOUT (Flash Of Unstyled Text)
+    en conexiones lentas. El navegador usa la fuente del sistema mientras carga
+    Poppins/Rubik y hace el swap cuando están disponibles.
+  -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700;800&family=Rubik:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+
+  <!-- Estilos -->
+  <link href="css/base.css" rel="stylesheet"/>
+  <link href="css/instagram.css" rel="stylesheet"/>
+</head>
+<body>
+
+  <!-- =============================================
+       BARRA DE NAVEGACIÓN
+       ============================================= -->
+  <header class="header anim-fade-in-down">
+    <div class="container header__container">
+
+      <a href="#" class="logo-brand">
+        <span class="logo-brand__icon anim-pulse"><i class="fa-solid fa-box-open"></i></span>
+        <div class="logo-brand__text">
+          <span class="logo-brand__main">Mi Envío</span>
+          <span class="logo-brand__sub">Cargo Express</span>
+        </div>
+      </a>
+
+      <ul class="header__menu" id="main-menu">
+        <li><a class="header__menu-link" href="#como-funciona" data-i18n="menu-como">¿Cómo funciona?</a></li>
+        <li><a class="header__menu-link" href="#calculadora"   data-i18n="menu-calc">Calculadora</a></li>
+        <li><a class="header__menu-link" href="#servicios"     data-i18n="menu-serv">Servicios</a></li>
+        <li><a class="header__menu-link" href="#sucursales"    data-i18n="menu-suc">Sucursales</a></li>
+        <li>
+          <select id="language-toggle"
+                  aria-label="Seleccionar idioma"
+                  style="padding:6px 12px; font-size:0.85rem; font-family:inherit; font-weight:600;
+                         background:rgba(0,0,0,0.374); color:#eee;
+                         border:1px solid rgb(0,0,0); border-radius:6px; cursor:pointer;">
+            <option value="es">🇩🇴 ES</option>
+            <option value="en">🇺🇸 EN</option>
+          </select>
+        </li>
+      </ul>
+
+      <button class="header__menu-toggle" id="menu-toggle"
+              aria-label="Abrir menú" aria-expanded="false" aria-controls="main-menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+    </div>
+  </header>
+
+  <!-- =============================================
+       HERO — Banner full-width + contenido
+       ============================================= -->
+  <section class="hero" id="hero" style="padding: 0 0 60px 0;">
+
+    <!-- Banner carrusel inyectado por instagram-carousel.js -->
+    <div id="insta-hero-banner" aria-live="polite"></div>
+
+    <!-- Headline + tracking card -->
+    <div class="container" style="padding-top: 52px;">
+      <div class="hero__content anim-fade-in-up" style="max-width: 640px; margin: 0 auto; text-align: center;">
+
+        <span class="hero__badge">
+          <i class="fa-solid fa-bolt"></i>
+          <span data-i18n="hero-badge">Envíos rápidos y seguros</span>
+        </span>
+
+        <h1 class="hero__title" data-i18n="hero-title">Tus compras del mundo en tus manos</h1>
+
+        <p class="hero__description" data-i18n="hero-desc" style="margin: 0 auto 32px auto;">
+          Trae tus paquetes desde Estados Unidos y el mundo con la tarifa más competitiva,
+          seguridad garantizada y atención personalizada.
+        </p>
+
+        <!-- Tracking card -->
+        <div class="tracking-card" style="text-align: left;">
+          <p class="tracking-card__title" id="tracking-card-label">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <span data-i18n="tracking-title">Rastrea tu Paquete</span>
+          </p>
+
+          <!--
+            CORRECCIÓN ACCESIBILIDAD:
+            - El <form> tiene id para que tracking.js lo encuentre
+            - El <label> visible asocia el texto al input via `for`
+            - El input tiene id="tracking-input" y aria-labelledby apunta al título
+            - El botón es type="submit" (no type="button") para activarse con Enter
+          -->
+          <form id="tracking-form" novalidate>
+            <label for="tracking-input" class="form-label" style="margin-bottom:8px; display:block;">
+              <span data-i18n="tracking-title">Rastrea tu Paquete</span>
+            </label>
+            <div class="tracking-card__input-group">
+              <input
+                type="text"
+                id="tracking-input"
+                name="tracking-code"
+                aria-labelledby="tracking-card-label"
+                style="flex:1; padding:14px 16px; border:2px solid #e2e8f0; border-radius:8px;
+                       font-family:inherit; font-size:1rem; font-weight:600; text-transform:uppercase;
+                       background:#f8fafc; transition:border-color 0.15s, box-shadow 0.15s;"
+                placeholder="Ej: ME-10245"
+                data-i18n-placeholder="tracking-placeholder"
+                autocomplete="off"
+                required
+              />
+              <button type="submit" class="button button--secondary" data-i18n="tracking-search">
+                Buscar
+              </button>
+            </div>
+          </form>
+
+          <div class="tracking-card__result hidden" id="tracking-result" role="status" aria-live="polite"></div>
+        </div>
+
+      </div>
+    </div>
+
+  </section>
+
+  <!-- =============================================
+       CONTENIDO PRINCIPAL
+       ============================================= -->
+  <main>
+
+    <!-- ── Cómo funciona ── -->
+    <section class="como-funciona section-padding" id="como-funciona">
+      <div class="container">
+        <h2 class="section-title text-center" data-aos="fade-up" data-i18n="steps-title">
+          Traer tus paquetes es así de fácil
+        </h2>
+        <p class="section-subtitle text-center" data-aos="fade-up" data-aos-delay="100" data-i18n="steps-subtitle">
+          Sigue estos tres sencillos pasos para empezar a recibir tus compras en República Dominicana.
+        </p>
+        <div class="steps-grid">
+          <div class="step-card" data-aos="fade-up" data-aos-delay="200">
+            <div class="step-card__number">1</div>
+            <div class="step-card__icon anim-pulse"><i class="fa-solid fa-user-plus"></i></div>
+            <h3 class="step-card__title" data-i18n="step1-title">Regístrate Gratis</h3>
+            <p class="step-card__description" data-i18n="step1-desc">
+              Crea tu cuenta en minutos para obtener tu código de cliente único y nuestra dirección de almacén en Miami.
+            </p>
+          </div>
+          <div class="step-card" data-aos="fade-up" data-aos-delay="400">
+            <div class="step-card__number">2</div>
+            <div class="step-card__icon anim-pulse"><i class="fa-solid fa-cart-shopping"></i></div>
+            <h3 class="step-card__title" data-i18n="step2-title">Compra en Línea</h3>
+            <p class="step-card__description" data-i18n="step2-desc">
+              Compra en Amazon, eBay o tu tienda favorita y usa tu dirección de Miami junto a tu código de cliente.
+            </p>
+          </div>
+          <div class="step-card" data-aos="fade-up" data-aos-delay="600">
+            <div class="step-card__number">3</div>
+            <div class="step-card__icon anim-pulse"><i class="fa-solid fa-truck-ramp-box"></i></div>
+            <h3 class="step-card__title" data-i18n="step3-title">Recibe y Disfruta</h3>
+            <p class="step-card__description" data-i18n="step3-desc">
+              Te notificaremos cuando tus paquetes lleguen. Retíralos en nuestra sucursal o solicita entrega a domicilio.
+            </p>
+          </div>
+        </div>
+        <div class="text-center" style="margin-top: 50px;">
+          <p data-i18n="steps-cta" style="font-size:1.1rem; margin-bottom:20px; color:var(--color-text-muted);">
+            ¿Listo para comenzar? Regístrate ahora y obtén tu dirección en Miami
+          </p>
+          <a class="button button--primary" data-i18n="steps-signup-btn" href="#" style="font-size:1.1rem; padding:14px 32px;">
+            Registrarse Gratis
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Calculadora ── -->
+    <section class="section-padding" id="calculadora">
+      <div class="container calculadora__container">
+        <div class="calculadora__info" data-aos="slide-right" data-aos-duration="800">
+          <h2 class="section-title" data-i18n="calc-title">Calcula el costo de tu envío</h2>
+          <p class="section-subtitle" data-i18n="calc-subtitle" style="margin-left:0; text-align:left;">
+            Evita sorpresas. Con nuestra calculadora interactiva puedes estimar el costo del flete
+            de tus paquetes según su peso en libras.
+          </p>
+          <div class="calculadora__note">
+            <p>
+              <strong data-i18n="calc-note-strong">Nota:</strong>
+              <span data-i18n="calc-note">Esta tarifa es un estimado basado en el transporte aéreo regular.
+              No incluye impuestos aduanales para artículos mayores a US$200.</span>
+            </p>
+          </div>
+        </div>
+
+        <div class="calculadora__box" data-aos="slide-up" data-aos-duration="1000">
+          <form id="shipping-calculator" novalidate>
+            <div class="form-group">
+              <label class="form-label" data-i18n="calc-tipo-label" for="calc-tipo">Tipo de Envío</label>
+              <select class="form-input" id="calc-tipo" name="tipo">
+                <option data-i18n-option="calc-tipo-aereo"    value="aereo">Aéreo Regular (Courier)</option>
+                <option data-i18n-option="calc-tipo-maritimo" value="maritimo">Carga Marítima</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" data-i18n="calc-peso-label" for="calc-peso">Peso en Libras (Lbs)</label>
+              <input class="form-input" id="calc-peso" name="peso" min="0.5" step="0.5" type="number" value="1" required/>
+            </div>
+            <button class="button button--secondary" data-i18n="calc-button" id="btn-calcular"
+                    style="width:100%;" type="button">
+              Calcular Tarifa
+            </button>
+          </form>
+
+          <!--
+            MEJORA: .calculadora__result ahora usa flex-direction column
+            para que el desglose quede debajo del total.
+            Se añadió el elemento #calc-breakdown para mostrar "X lbs × $4.25/lb = $Y"
+          -->
+          <div class="calculadora__result hidden" id="calc-result">
+            <div class="calculadora__result-row">
+              <span class="calculadora__result-label" data-i18n="calc-result-label">Total Estimado Flete:</span>
+              <span class="calculadora__result-value anim-value" id="calc-total">USD $0.00</span>
+            </div>
+            <div class="calculadora__breakdown" id="calc-breakdown"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Servicios ── -->
+    <section class="servicios section-padding" id="servicios">
+      <div class="container">
+        <h2 class="section-title text-center" data-i18n="serv-title" data-aos="fade-up">
+          Soluciones Logísticas a tu Medida
+        </h2>
+        <p class="section-subtitle text-center" data-i18n="serv-subtitle" data-aos="fade-up" data-aos-delay="100">
+          Ofrecemos una variedad de servicios de transporte adaptados a tus necesidades personales o comerciales.
+        </p>
+        <div class="servicios__grid">
+          <article class="servicio-card" data-aos="zoom-in" data-aos-delay="200">
+            <div class="servicio-card__icon-container anim-pulse"><i class="fa-solid fa-plane"></i></div>
+            <h3 class="servicio-card__title" data-i18n="serv-c1-title">Courier Aéreo</h3>
+            <p class="servicio-card__description" data-i18n="serv-c1-desc">
+              Tus compras personales de internet traídas de forma rápida, eficiente y segura directo desde Miami.
+            </p>
+          </article>
+          <article class="servicio-card" data-aos="zoom-in" data-aos-delay="400">
+            <div class="servicio-card__icon-container anim-pulse"><i class="fa-solid fa-ship"></i></div>
+            <h3 class="servicio-card__title" data-i18n="serv-c2-title">Carga Marítima</h3>
+            <p class="servicio-card__description" data-i18n="serv-c2-desc">
+              La opción ideal y más económica para mercancías de gran volumen, cajas pesadas y mudanzas.
+            </p>
+          </article>
+          <article class="servicio-card" data-aos="zoom-in" data-aos-delay="600">
+            <div class="servicio-card__icon-container anim-pulse"><i class="fa-solid fa-building-shield"></i></div>
+            <h3 class="servicio-card__title" data-i18n="serv-c3-title">Logística Empresarial</h3>
+            <p class="servicio-card__description" data-i18n="serv-c3-desc">
+              Manejo de carga comercial, asesoría aduanal corporativa y distribución eficiente para tu negocio.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Sucursales / Contacto ──
+         CAMBIO: eliminado el bloque <style> inline que estaba aquí.
+         Los estilos de .sucursal-item-box ahora están en css/base.css.
+    -->
+    <section class="sucursales section-padding section-bg-light" id="sucursales">
+      <div class="container">
+        <div class="text-center" data-aos="fade-up">
+          <h2 class="section-title" data-i18n="suc-title">Nuestras Oficinas</h2>
+          <p class="section-subtitle" data-i18n="suc-subtitle">Nuestra sede central de recepción en Estados Unidos y puntos de entrega.</p>
+        </div>
+
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:32px; margin-bottom:60px;">
+
+          <!-- Sucursal Principal — borde naranja (color secundario) -->
+          <div class="sucursal-item-box sucursal-item-box--primary" data-aos="fade-up" data-aos-delay="200">
+            <div>
+              <h3 style="font-size:1.3rem; margin-bottom:12px;">
+                <i class="fa-solid fa-location-dot" style="color:var(--color-secondary);"></i> Principal (Brooklyn)
+              </h3>
+              <p style="font-weight:500; margin-bottom:6px;">4512 3rd Ave, Brooklyn, NY 11220</p>
+              <p style="font-size:0.95rem; color:#666;">
+                <strong data-i18n="suc-schedule">Horario:</strong>
+                <span data-i18n="suc-days">Lun–Vie 9:00 AM–6:00 PM | Sáb 9:00 AM–2:00 PM</span>
+              </p>
+            </div>
+            <div style="margin-top:16px; display:flex; flex-direction:column; gap:8px;">
+              <a class="phone-link" href="tel:+13474951341"
+                 style="color:var(--color-primary); font-weight:600; display:inline-flex;
+                        align-items:center; gap:8px; text-decoration:none; font-size:0.95rem;">
+                <i class="fa-solid fa-phone"></i> (347) 495-1341
+              </a>
+              <a class="phone-link" href="tel:+19173069313"
+                 style="color:var(--color-primary); font-weight:600; display:inline-flex;
+                        align-items:center; gap:8px; text-decoration:none; font-size:0.95rem;">
+                <i class="fa-solid fa-phone"></i> (917) 306-9313
+              </a>
+            </div>
+          </div>
+
+          <!-- Sucursal Charlotte -->
+          <div class="sucursal-item-box" data-aos="fade-up" data-aos-delay="400">
+            <div>
+              <h3 style="font-size:1.3rem; margin-bottom:12px;">
+                <i class="fa-solid fa-location-dot" style="color:var(--color-primary);"></i> Charlotte
+              </h3>
+              <p style="font-weight:500; margin-bottom:6px;">3137 Amity Ct, Suite 300, Charlotte, NC 28215</p>
+              <p style="font-size:0.95rem; color:#666;">
+                <strong data-i18n="suc-schedule">Horario:</strong>
+                <span data-i18n="suc-days">Lun–Vie 9:00 AM–6:00 PM | Sáb 9:00 AM–2:00 PM</span>
+              </p>
+            </div>
+          </div>
+
+          <!-- Sucursal Chicago -->
+          <div class="sucursal-item-box" data-aos="fade-up" data-aos-delay="600">
+            <div>
+              <h3 style="font-size:1.3rem; margin-bottom:12px;">
+                <i class="fa-solid fa-location-dot" style="color:var(--color-primary);"></i> Chicago
+              </h3>
+              <p style="font-weight:500; margin-bottom:6px;">3441 W 26th Street, Chicago, IL 60623</p>
+              <p style="font-size:0.95rem; color:#666;">
+                <strong data-i18n="suc-schedule">Horario:</strong>
+                <span data-i18n="suc-days">Lun–Vie 9:00 AM–6:00 PM | Sáb 9:00 AM–2:00 PM</span>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Formulario de contacto -->
+        <div class="contacto-form-box" data-aos="fade-up" data-aos-delay="400">
+          <h3 style="margin-bottom:24px; text-align:center; color:var(--color-primary);">
+            <i class="fa-solid fa-envelope"></i> <span data-i18n="form-title">Escríbenos</span>
+          </h3>
+          <!--
+            CORRECCIÓN CRÍTICA:
+            Este formulario antes hacía submit nativo (recarga de página sin enviar nada).
+            Ahora contact-form.js hace preventDefault() + validación + feedback visual.
+            novalidate desactiva la UI nativa del browser para usar la nuestra.
+          -->
+          <form class="contacto__form" novalidate>
+            <div class="form-group">
+              <label class="form-label" for="contact-name" data-i18n="form-name">Tu Nombre</label>
+              <input id="contact-name" name="nombre" autocomplete="name" class="form-input"
+                     placeholder="Nombre completo" data-i18n-placeholder="form-name-ph"
+                     required type="text"/>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="contact-email" data-i18n="form-email">Tu Correo</label>
+              <input id="contact-email" name="email" autocomplete="email" class="form-input"
+                     placeholder="correo@ejemplo.com" data-i18n-placeholder="form-email-ph"
+                     required type="email"/>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="contact-msg" data-i18n="form-msg">Mensaje</label>
+              <textarea id="contact-msg" name="mensaje" class="form-textarea"
+                        placeholder="¿En qué podemos ayudarte respecto a tus paquetes?"
+                        data-i18n-placeholder="form-msg-ph" required rows="4"></textarea>
+            </div>
+            <button class="button button--secondary" data-i18n="form-btn"
+                    style="width:100%; padding:14px;" type="submit">
+              Enviar Mensaje
+            </button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ── Footer ── -->
+  <footer class="footer section-bg-dark">
+    <div class="container footer__container">
+      <div class="footer__brand-info">
+        <div class="logo-brand">
+          <span class="logo-brand__icon anim-pulse"><i class="fa-solid fa-box-open"></i></span>
+          <div class="logo-brand__text">
+            <span class="logo-brand__main" style="color:#fff;">Mi Envío</span>
+            <span class="logo-brand__sub" style="color:var(--color-secondary);">Cargo Express</span>
+          </div>
+        </div>
+        <p class="footer__text" data-i18n="footer-desc">
+          Tu aliado estratégico en transporte de carga y courier internacional.
+          Llevamos confianza a cada destino.
+        </p>
+      </div>
+      <div class="footer__links-group">
+        <h4 data-i18n="footer-links">Enlaces</h4>
+        <ul>
+          <li><a href="#como-funciona" data-i18n="menu-como">¿Cómo funciona?</a></li>
+          <li><a href="#calculadora"   data-i18n="menu-calc">Calculadora</a></li>
+          <li><a href="#servicios"     data-i18n="menu-serv">Servicios</a></li>
+          <li><a href="#sucursales"    data-i18n="menu-suc">Sucursales</a></li>
+        </ul>
+      </div>
+      <div class="footer__social-group">
+        <h4 data-i18n="footer-social">Síguenos en Redes</h4>
+        <p data-i18n="footer-social-desc">Mantente al tanto de ofertas, estados de vuelos y novedades de aduanas.</p>
+        <div class="footer__social-links">
+          <a aria-label="Instagram"
+             class="social-link social-link--instagram social-link--glow"
+             href="https://www.instagram.com/mienviocargoexpress/"
+             rel="noopener noreferrer" target="_blank">
+            <i class="fa-brands fa-instagram"></i> @mienviocargoexpress
+          </a>
+          <a aria-label="Facebook"
+             class="social-link social-link--facebook social-link--glow-fb"
+             href="https://www.facebook.com/mienviocargoexpress/"
+             rel="noopener noreferrer" target="_blank">
+            <i class="fa-brands fa-facebook"></i> @mienviocargoexpress
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="footer__bottom container text-center">
+      <p>© <span id="current-year"></span> Mi Envío Cargo Express. <span data-i18n="footer-rights">Todos los derechos reservados.</span></p>
+    </div>
+  </footer>
+
+  <!-- =============================================
+       SCRIPTS
+       ORDEN IMPORTANTE:
+       1. AOS (librería externa)
+       2. i18n.js   → define window.i18n (debe ir antes que main.js y el carousel)
+       3. main.js   → inicializa AOS, menú, selector de idioma
+       4. tracking.js, calculator.js, contact-form.js → módulos independientes
+       5. instagram-carousel.js → necesita window.i18n ya cargado
+       ============================================= -->
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/tracking.js"></script>
+  <script src="js/calculator.js"></script>
+  <script src="js/contact-form.js"></script>
+  <script src="js/instagram-carousel.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,242 @@
+/* ============================================================
+   css/instagram.css
+   Hero Banner Full-Width — estilo MangaFox
+   Funciona con: js/instagram-carousel.js
+
+   CAMBIOS vs versión anterior:
+   - Eliminada la definición duplicada de .ihb-slide
+     (antes aparecía dos veces: una con opacity/transform y otra con overflow:hidden)
+     → Ahora están consolidadas en un solo bloque.
+   - .ihb-slide__img ya no redefine position: relative innecesariamente
+   - Orden de z-index documentado explícitamente
+   ============================================================ */
+
+/* ─── CONTENEDOR RAÍZ ──────────────────────────────────────── */
+#insta-hero-banner {
+  width: 100%;
+  overflow: hidden;
+}
+
+/* ─── SLIDER WRAPPER ──────────────────────────────────────────  */
+.ihb-slider {
+  position: relative;
+  width: 100%;
+  height: 420px;
+  overflow: hidden;
+  background-color: #0a1020; /* Fallback mientras cargan las imágenes */
+  cursor: pointer;
+  user-select: none;
+}
+
+@media (min-width: 1400px) { .ihb-slider { height: 480px; } }
+@media (max-width: 768px)  { .ihb-slider { height: 260px; } }
+@media (max-width: 480px)  { .ihb-slider { height: 200px; } }
+
+/* ─── TRACK ────────────────────────────────────────────────────  */
+.ihb-track {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+/* ─── SLIDE INDIVIDUAL ─────────────────────────────────────────
+   CORREGIDO: versión anterior tenía DOS bloques separados para .ihb-slide,
+   uno con opacity/transform y otro con overflow:hidden.
+   Ahora están consolidados aquí.
+
+   Stack de z-index dentro del slide:
+     .ihb-slide__bg      → z-index: 0  (fondo difuminado)
+     .ihb-slide__img     → z-index: 1  (imagen principal)
+     .ihb-slide__overlay → z-index: 2  (degradado + label)
+*/
+.ihb-slide {
+  position: absolute;
+  inset: 0;
+  display: block;
+  text-decoration: none;
+  overflow: hidden; /* Evita que el blur del bg se salga del contenedor */
+
+  /* Estado inicial: invisible */
+  opacity: 0;
+  transform: scale(1.04);
+  transition:
+    opacity   0.6s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+
+  pointer-events: none;
+}
+
+/* Slide activo */
+.ihb-slide--active {
+  opacity: 1;
+  transform: scale(1);
+  pointer-events: auto;
+  z-index: 1;
+}
+
+/* ─── FONDO DIFUMINADO (Ken Burns atmosférico) ──────────────────  */
+.ihb-slide__bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  filter: blur(25px) brightness(0.4);
+  transform: scale(1.1); /* Evita bordes blancos causados por el blur */
+  z-index: 0;
+}
+
+/* ─── IMAGEN PRINCIPAL ─────────────────────────────────────────  */
+.ihb-slide__img {
+  position: relative; /* Necesario para quedar por encima del .ihb-slide__bg */
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  display: block;
+  pointer-events: none; /* Evita drag nativo del browser */
+}
+
+/* ─── OVERLAY CON LABEL ────────────────────────────────────────  */
+.ihb-slide__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2; /* Por encima de img y bg */
+  background: linear-gradient(
+    to top,
+    rgba(10, 16, 32, 0.75) 0%,
+    rgba(10, 16, 32, 0.15) 45%,
+    rgba(10, 16, 32, 0)    70%
+  );
+  display: flex;
+  align-items: flex-end;
+  padding: 28px 40px;
+}
+
+.ihb-slide__label {
+  font-family: 'Poppins', 'Segoe UI', sans-serif;
+  font-weight: 700;
+  font-size: 1.4rem;
+  color: #ffffff;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.6);
+  letter-spacing: 0.01em;
+
+  /* Entrada con slide-up */
+  transform: translateY(8px);
+  opacity: 0;
+  transition: transform 0.5s 0.3s ease, opacity 0.5s 0.3s ease;
+}
+
+/* El label solo se anima cuando el slide está activo */
+.ihb-slide--active .ihb-slide__label {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+@media (max-width: 768px) {
+  .ihb-slide__overlay { padding: 16px 20px; }
+  .ihb-slide__label   { font-size: 1rem; }
+}
+
+/* ─── FLECHAS DE NAVEGACIÓN ────────────────────────────────────  */
+.ihb-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(10, 16, 32, 0.55);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  color: #ffffff;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.35);
+  transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.ihb-arrow:hover {
+  background: var(--color-secondary, #ff6b00);
+  transform: translateY(-50%) scale(1.1);
+  box-shadow: 0 6px 24px rgba(255, 107, 0, 0.45);
+}
+
+.ihb-arrow:active { transform: translateY(-50%) scale(0.96); }
+
+.ihb-arrow svg    { width: 22px; height: 22px; flex-shrink: 0; }
+.ihb-arrow--prev  { left: 20px; }
+.ihb-arrow--next  { right: 20px; }
+
+@media (max-width: 576px) {
+  .ihb-arrow       { width: 38px; height: 38px; }
+  .ihb-arrow svg   { width: 16px; height: 16px; }
+  .ihb-arrow--prev { left: 10px; }
+  .ihb-arrow--next { right: 10px; }
+}
+
+/* ─── DOTS DE NAVEGACIÓN ──────────────────────────────────────  */
+.ihb-dots {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.ihb-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  background: rgba(255, 255, 255, 0.4);
+  transition: background 0.3s ease, transform 0.3s ease, width 0.3s ease;
+}
+
+.ihb-dot--active {
+  background: var(--color-secondary, #ff6b00);
+  width: 28px;
+  border-radius: 5px;
+  transform: none;
+}
+
+.ihb-dot:not(.ihb-dot--active):hover {
+  background: rgba(255, 255, 255, 0.75);
+  transform: scale(1.2);
+}
+
+/* ─── BARRA DE PROGRESO ───────────────────────────────────────  */
+.ihb-progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.15);
+  z-index: 10;
+  overflow: hidden;
+}
+
+.ihb-progress__bar {
+  height: 100%;
+  width: 0%;
+  background: var(--color-secondary, #ff6b00);
+}
+
+.ihb-progress__bar--running {
+  animation: ihb-progress-fill 5s linear forwards;
+}
+
+@keyframes ihb-progress-fill {
+  from { width: 0%;   }
+  to   { width: 100%; }
+}
