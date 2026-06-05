@@ -54,31 +54,17 @@ document.addEventListener('DOMContentLoaded', () => {
     submitBtn.style.opacity = '0.7';
 
     try {
-      // ── TODO: REEMPLAZAR ESTE BLOQUE con tu integración real ──────────────
-      //
-      // Opción A — Formspree (gratis hasta 50 envíos/mes):
-      //   const response = await fetch('https://formspree.io/f/TU_FORM_ID', {
-      //     method: 'POST',
-      //     headers: { 'Content-Type': 'application/json' },
-      //     body: JSON.stringify({
-      //       nombre: nameInput.value.trim(),
-      //       email:  emailInput.value.trim(),
-      //       mensaje: messageInput.value.trim()
-      //     })
-      //   });
-      //   if (!response.ok) throw new Error('Server error');
-      //
-      // Opción B — EmailJS:
-      //   await emailjs.send('SERVICE_ID', 'TEMPLATE_ID', {
-      //     from_name:  nameInput.value.trim(),
-      //     from_email: emailInput.value.trim(),
-      //     message:    messageInput.value.trim()
-      //   });
-      //
-      // Opción C — Tu propio endpoint:
-      //   const response = await fetch('/api/contact', { method: 'POST', ... });
-      //
-      // ── FIN TODO ──────────────────────────────────────────────────────────
+      const response = await fetch('https://formspree.io/f/xeewekwa', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    name: nameInput.value.trim(),
+    email: emailInput.value.trim(),
+    message: messageInput.value.trim()
+      })
+    });
+
+    if (!response.ok) throw new Error('Formspree error');
 
       // Simulación de envío (2 segundos) — REMOVER cuando conectes el backend
       await new Promise(resolve => setTimeout(resolve, 2000));
