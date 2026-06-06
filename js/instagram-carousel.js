@@ -1,77 +1,57 @@
 /**
- * js/instagram-carousel.js  (MEJORADO)
- * Hero banner full-width con las imágenes de Instagram.
- *
- * BUGS CORREGIDOS vs versión anterior:
- *  1. Entrada de Colombia tenía `label: "Envios para Colombia"` (string plano)
- *     en vez de `label: {es: "...", en: "..."}` — causaba `undefined` en inglés.
- *     → Todas las entradas ahora usan el objeto `{es, en}` consistentemente.
- *
- *  2. El carousel escuchaba el cambio de idioma vía `langToggle.addEventListener('change',...)`
- *     acoplándolo directamente al select del header. Ahora escucha el CustomEvent
- *     'langchange' que dispara `window.i18n.setLang()` — desacoplado.
- *
- *  3. Acceso directo a `localStorage.getItem('site-lang')` reemplazado por
- *     `window.i18n.getLang()` para consistencia de idioma.
+ * js/instagram-carousel.js
+ * Hero banner full-width con imagenes promocionales.
  */
 
-// ─── DATOS ──────────────────────────────────────────────────────────────────
-// REGLA: Todas las entradas DEBEN tener `label` como objeto {es, en}.
-// Si solo tienes un idioma, repite el texto: {es: "Texto", en: "Texto"}.
 const INSTA_POSTS = [
   {
-    src:   "{css,js}/insta1.png",
-    label: { es: "Envíos para México",      en: "Shipping to Mexico" },
+    src:   "img/ecuador-promo.jpg",
+    label: { es: "Envios a Ecuador — Caja 18x18x28 sin limite de peso $375", en: "Shipping to Ecuador — Box 18x18x28 no weight limit $375" },
     href:  "https://www.instagram.com/mienviocargoexpress/"
   },
   {
-    src:   "{css,js}/insta2.png",
-    label: { es: "Envíos para Honduras",    en: "Shipping to Honduras" },
+    src:   "img/mexico-centroamerica.jpg",
+    label: { es: "Envios a Mexico y Centroamerica", en: "Shipping to Mexico and Central America" },
     href:  "https://www.instagram.com/mienviocargoexpress/"
   },
   {
-    src:   "{css,js}/NY-HOND.JPG",
-    label: { es: "Envíos desde New York",   en: "Shipping from New York" },
+    src:   "img/ny-honduras.jpg",
+    label: { es: "Envios desde Nueva York a Honduras", en: "Shipping from New York to Honduras" },
     href:  "https://www.instagram.com/mienviocargoexpress/"
   },
   {
-    src:   "{css,js}/promocion-envioMX.jpg",
-    label: { es: "Envíos para El Salvador", en: "Shipping to El Salvador" },
+    src:   "img/mexico-2cajas.jpg",
+    label: { es: "2 cajas 22x22x22 a Mexico por $370", en: "2 boxes 22x22x22 to Mexico for $370" },
     href:  "https://www.instagram.com/mienviocargoexpress/"
   },
   {
-    src:   "{css,js}/insta5.png",
-    label: { es: "Envíos para Guatemala",   en: "Shipping to Guatemala" },
+    src:   "img/brooklyn-3x3.jpg",
+    label: { es: "3x3 — 3 cajas 18x18x18 por $300 solo en Brooklyn", en: "3x3 — 3 boxes 18x18x18 for $300 Brooklyn only" },
     href:  "https://www.instagram.com/mienviocargoexpress/"
   },
   {
-    src:   "{css,js}/colombia-promo.png",
-    // BUG CORREGIDO: antes era `label: "Envios para Colombia"` (string plano)
-    label: { es: "Envíos para Colombia",    en: "Shipping to Colombia" },
+    src:   "img/promocion-mexico.jpg",
+    label: { es: "Super promocion — caja 22x22x22 + 18x18x18 gratis", en: "Super promo — box 22x22x22 + 18x18x18 free" },
     href:  "https://www.instagram.com/mienviocargoexpress/"
   }
 ];
 
-// ─── CONSTANTES ──────────────────────────────────────────────────────────────
-const AUTO_PLAY_INTERVAL  = 5000;  // ms entre slides
-const TRANSITION_DURATION = 600;   // ms — debe coincidir con CSS
+const AUTO_PLAY_INTERVAL  = 5000;
+const TRANSITION_DURATION = 600;
 
-// ─── ESTADO INTERNO ──────────────────────────────────────────────────────────
 let currentIndex    = 0;
 let autoPlayTimer   = null;
 let isTransitioning = false;
 
-// ─── CONSTRUCCIÓN DEL HTML ────────────────────────────────────────────────────
 function buildBanner() {
   const container = document.getElementById("insta-hero-banner");
   if (!container) return;
 
-  // Idioma inicial desde window.i18n (corregido: antes era localStorage directo)
   const currentLang = window.i18n ? window.i18n.getLang() : 'es';
 
   container.innerHTML = `
     <div class="ihb-slider" id="ihb-slider"
-         aria-label="${currentLang === 'es' ? 'Anuncios Mi Envío Cargo Express' : 'Mi Envío Cargo Express Announcements'}"
+         aria-label="${currentLang === 'es' ? 'Anuncios Mi Envio Cargo Express' : 'Mi Envio Cargo Express Announcements'}"
          role="region">
 
       <div class="ihb-track" id="ihb-track">
@@ -123,7 +103,7 @@ function buildBanner() {
             data-index="${i}"
             role="tab"
             aria-selected="${i === 0 ? 'true' : 'false'}"
-            aria-label="${currentLang === 'es' ? 'Slide' : 'Slide'} ${i + 1}"
+            aria-label="Slide ${i + 1}"
             type="button"
           ></button>
         `).join("")}
@@ -140,23 +120,12 @@ function buildBanner() {
   listenForLangChange();
 }
 
-// ─── ESCUCHA DE CAMBIO DE IDIOMA (desacoplado) ──────────────────────────────
-/**
- * listenForLangChange()
- * En vez de acoplarse al <select> directamente, escucha el CustomEvent 'langchange'
- * que dispara window.i18n.setLang(). Esto desacopla el carrusel del header.
- */
 function listenForLangChange() {
   document.addEventListener('langchange', (e) => {
-    const newLang = e.detail?.lang || 'es';
-    updateLabels(newLang);
+    updateLabels(e.detail?.lang || 'es');
   });
 }
 
-/**
- * updateLabels(lang)
- * Actualiza los textos visibles y atributos de accesibilidad del carrusel.
- */
 function updateLabels(lang) {
   document.querySelectorAll('.ihb-slide__label').forEach(span => {
     const idx = parseInt(span.getAttribute('data-insta-idx'), 10);
@@ -176,7 +145,6 @@ function updateLabels(lang) {
   });
 }
 
-// ─── NAVEGACIÓN ───────────────────────────────────────────────────────────────
 function goTo(index) {
   if (isTransitioning) return;
   if (index === currentIndex) return;
@@ -208,7 +176,6 @@ function goTo(index) {
 function goNext() { goTo(currentIndex + 1); }
 function goPrev() { goTo(currentIndex - 1); }
 
-// ─── AUTO-PLAY ────────────────────────────────────────────────────────────────
 function startAutoPlay() {
   stopAutoPlay();
   autoPlayTimer = setInterval(goNext, AUTO_PLAY_INTERVAL);
@@ -226,7 +193,7 @@ function resetProgressBar() {
   const bar = document.getElementById("ihb-progress-bar");
   if (!bar) return;
   bar.classList.remove("ihb-progress__bar--running");
-  void bar.offsetWidth; // Fuerza reflow
+  void bar.offsetWidth;
   bar.classList.add("ihb-progress__bar--running");
 }
 
@@ -240,7 +207,6 @@ function restartAutoPlay() {
   startAutoPlay();
 }
 
-// ─── EVENTOS ─────────────────────────────────────────────────────────────────
 function attachEvents() {
   const slider        = document.getElementById("ihb-slider");
   const prevBtn       = document.getElementById("ihb-prev");
@@ -271,7 +237,6 @@ function attachEvents() {
     if (e.key === "ArrowRight") { goNext(); restartAutoPlay(); }
   });
 
-  // Swipe táctil
   let touchStartX = 0;
   slider.addEventListener("touchstart", (e) => {
     touchStartX = e.changedTouches[0].clientX;
@@ -285,7 +250,6 @@ function attachEvents() {
   }, { passive: true });
 }
 
-// ─── INIT ─────────────────────────────────────────────────────────────────────
 if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", buildBanner);
 } else {
