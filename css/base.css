@@ -136,15 +136,137 @@ a  { text-decoration: none; transition: var(--transition); }
 .header__menu-toggle:hover span { background-color: var(--color-accent); }
 
 /*------------------------------------*\
-  #HERO Y TRACKING
+  #HERO Y TRACKING - TICKET THEME
 \*------------------------------------*/
-.hero             { padding: 70px 0; background: linear-gradient(135deg, #1a0303 0%, #2d0505 50%, #1a0303 100%); color: var(--color-white); overflow: hidden; }
+.hero { 
+  padding: 70px 0; 
+  background: linear-gradient(135deg, #1a0303 0%, #2d0505 50%, #1a0303 100%); 
+  color: var(--color-white); 
+  overflow: hidden; 
+}
 .hero__container  { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 48px; align-items: center; }
 .hero__badge      { display: inline-flex; align-items: center; gap: 8px; background-color: rgba(224,184,0,0.15); color: var(--color-accent); padding: 6px 14px; border-radius: 50px; font-weight: 600; font-size: 0.85rem; margin-bottom: 20px; border: 1px solid rgba(224,184,0,0.3); }
 .hero__title      { color: var(--color-white); margin-bottom: 16px; }
 .hero__description{ color: #e8c0c0; font-size: 1.15rem; margin-bottom: 32px; max-width: 540px; }
-.hero__image      { width: 100%; border-radius: var(--border-radius); box-shadow: var(--shadow-lg); object-fit: cover; height: 480px; transition: var(--transition); }
-.hero__image-wrapper:hover .hero__image { transform: scale(1.02); }
+
+/* Contenedor principal de la etiqueta */
+.tracking-card.ticket-theme {
+  background: #fffcf9; /* Tono tipo papel */
+  border-radius: 8px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.5); /* Sombra pesada para que resalte del fondo oscuro */
+  color: var(--color-text-main);
+  max-width: 500px;
+  position: relative;
+  overflow: hidden;
+  border: 2px dashed #b5a4a4; /* Simula troquelado de papel */
+  padding: 0; 
+}
+
+/* Cabecera roja con código de barras */
+.ticket__header {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  padding: 12px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px dashed rgba(255,255,255,0.4);
+}
+
+.ticket__barcode {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 1.5rem;
+  letter-spacing: -2px;
+  opacity: 0.9;
+  font-weight: 800;
+}
+
+.ticket__type {
+  font-weight: 800;
+  font-size: 0.85rem;
+  letter-spacing: 1.5px;
+}
+
+/* Cuerpo donde va el input */
+.ticket__body {
+  padding: 24px;
+}
+
+.tracking-card__title { 
+  font-size: 1.1rem; 
+  margin-bottom: 14px; 
+  display: flex; 
+  align-items: center; 
+  gap: 8px; 
+  color: var(--color-primary-dark); 
+  text-transform: uppercase;
+  font-weight: 800;
+}
+
+/* Ocultar visualmente el label pero mantenerlo para accesibilidad */
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); border: 0;
+}
+
+.ticket__input-group { display: flex; gap: 8px; }
+
+/* Input estilo industrial / monospace */
+.ticket__input {
+  flex: 1;
+  padding: 14px 16px;
+  border: 2px solid #4a4a4a;
+  border-radius: 4px;
+  font-family: 'Courier New', Courier, monospace; /* Fundamental para el look de rastreo */
+  font-size: 1.2rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  background-color: transparent;
+  color: #1a1a1a;
+  letter-spacing: 1px;
+  transition: var(--transition-fast);
+}
+
+.ticket__input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  background-color: var(--color-white);
+  box-shadow: 0 0 0 3px rgba(200,21,26,0.1);
+}
+
+.ticket__input::placeholder {
+  color: #a0a0a0;
+  font-weight: 400;
+}
+
+.ticket__btn {
+  border-radius: 4px;
+  text-transform: uppercase;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+/* Pie de la etiqueta */
+.ticket__footer {
+  background-color: #e8e2e2;
+  padding: 12px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #5a5a5a;
+  border-top: 2px dashed #b5a4a4;
+}
+
+.tracking-card__result { 
+  margin-top: 16px; 
+  padding: 16px; 
+  border-radius: 4px; 
+  font-size: 0.95rem; 
+  border: 1px solid var(--color-primary); 
+  background-color: #fff5f5; 
+  line-height: 1.6; 
+}
 
 /* Tracking card */
 .tracking-card        { background: var(--color-white); padding: 24px; border-radius: var(--border-radius); box-shadow: var(--shadow-lg); color: var(--color-text-main); max-width: 500px; transition: var(--transition); border: 2px solid transparent; }
@@ -158,19 +280,135 @@ a  { text-decoration: none; transition: var(--transition); }
 .tracking-card__result { margin-top: 16px; padding: 16px; border-radius: 8px; font-size: 0.95rem; border-left: 4px solid var(--color-primary); background-color: var(--color-background-light); line-height: 1.6; }
 
 /*------------------------------------*\
-  #COMO FUNCIONA
+  #COMO FUNCIONA - TIMELINE
 \*------------------------------------*/
-.steps-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 32px; }
-.step-card  { background: var(--color-white); padding: 40px 32px; border-radius: var(--border-radius); box-shadow: var(--shadow-sm); border: 1px solid #f5e5e5; position: relative; text-align: center; transition: var(--transition); overflow: hidden; }
-.step-card:hover         { transform: translateY(-10px); box-shadow: var(--shadow-lg); border-color: rgba(200,21,26,0.2); }
-.step-card::after        { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 0; background-color: rgba(200,21,26,0.03); transition: var(--transition); z-index: 1; }
-.step-card:hover::after  { height: 5px; }
+.timeline {
+  position: relative;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 40px 0;
+}
 
-.step-card__number      { position: absolute; top: 16px; left: 24px; font-size: 4rem; font-weight: 800; color: #f5e5e5; z-index: 1; line-height: 1; transition: var(--transition); }
-.step-card:hover .step-card__number { color: rgba(200,21,26,0.06); }
-.step-card__icon        { width: 70px; height: 70px; background-color: rgba(200,21,26,0.08); color: var(--color-primary); font-size: 2rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px auto; position: relative; z-index: 2; }
-.step-card__title       { font-size: 1.35rem; margin-bottom: 12px; position: relative; z-index: 2; }
-.step-card__description { color: var(--color-text-muted); font-size: 0.95rem; position: relative; z-index: 2; }
+/* La línea central simulando la ruta del paquete */
+.timeline__line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 4px;
+  background: repeating-linear-gradient(
+    to bottom,
+    var(--color-primary-light) 0,
+    var(--color-primary-light) 10px,
+    transparent 10px,
+    transparent 20px
+  );
+  transform: translateX(-50%);
+  z-index: 1;
+}
+
+.timeline__item {
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 50%;
+  position: relative;
+  margin-bottom: 40px;
+  width: 100%;
+}
+
+.timeline__item--right {
+  justify-content: flex-start;
+  padding-right: 0;
+  padding-left: 50%;
+}
+
+/* El número del paso flotante en la línea central */
+.timeline__marker {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 50px;
+  height: 50px;
+  background-color: var(--color-white);
+  border: 4px solid var(--color-primary);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--color-primary);
+  z-index: 2;
+  box-shadow: var(--shadow-md);
+}
+
+/* Tarjetas individuales */
+.step-card {
+  background: var(--color-white);
+  padding: 32px;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-md);
+  border: 1px solid #f5e5e5;
+  width: 85%; /* Deja espacio entre la tarjeta y la línea central */
+  position: relative;
+  transition: var(--transition);
+  text-align: left;
+}
+
+.timeline__item--right .step-card {
+  margin-left: auto;
+}
+
+.step-card:hover {
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: var(--shadow-lg);
+  border-color: rgba(200,21,26,0.3);
+}
+
+.step-card__icon {
+  width: 60px;
+  height: 60px;
+  background-color: rgba(200,21,26,0.08);
+  color: var(--color-primary);
+  font-size: 1.5rem;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.step-card__title {
+  font-size: 1.3rem;
+  margin-bottom: 8px;
+}
+
+.step-card__description {
+  color: var(--color-text-muted);
+  font-size: 0.95rem;
+}
+
+/* Adaptación para móviles: Colapsar la línea a la izquierda */
+@media (max-width: 768px) {
+  .timeline__line {
+    left: 30px;
+  }
+  .timeline__item {
+    justify-content: flex-start;
+    padding-right: 0;
+    padding-left: 80px;
+  }
+  .timeline__item--right {
+    padding-left: 80px;
+  }
+  .timeline__marker {
+    left: 30px;
+  }
+  .step-card {
+    width: 100%;
+  }
+}
 
 /*------------------------------------*\
   #CALCULADORA
